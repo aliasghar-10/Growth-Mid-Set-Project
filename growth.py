@@ -36,8 +36,8 @@ import streamlit as st
 import pandas as pd
 import os
 from io import BytesIO
+import matplotlib
 import matplotlib.pyplot as plt
-
 def main():
     st.title("Growth Mindset Challenge")
     st.write("Welcome to the Growth Mindset Challenge App!")
