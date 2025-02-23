@@ -36,26 +36,53 @@ import streamlit as st
 import pandas as pd
 import os
 from io import BytesIO
-import matplotlib as plt
+
 def main():
+    st.set_page_config(page_title="Growth Mindset Challenge", layout="wide", initial_sidebar_state="expanded")
+    apply_dark_mode()
+
     st.title("Growth Mindset Challenge")
     st.write("Welcome to the Growth Mindset Challenge App!")
 
-    menu = ["Home", "Upload Data", "Visualize Data", "Set Goals", "Track Progress", "About"]
+    menu = ["Home", "Upload Data", "View Data", "Set Goals", "Track Progress", "About"]
     choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Home":
         home_page()
     elif choice == "Upload Data":
         upload_data_page()
-    elif choice == "Visualize Data":
-        visualize_data_page()
+    elif choice == "View Data":
+        view_data_page()
     elif choice == "Set Goals":
         set_goals_page()
     elif choice == "Track Progress":
         track_progress_page()
     elif choice == "About":
         about_page()
+
+def apply_dark_mode():
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #0e1117;
+            color: #c9d1d9;
+        }
+        .stButton>button {
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+        }
+        .stButton>button:hover {
+            background-color: #30363d;
+        }
+        .stSidebar {
+            background-color: #161b22;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 def home_page():
     st.header("Home")
@@ -77,20 +104,12 @@ def upload_data_page():
             st.error(f"Error reading file: {e}")
 
 
-def visualize_data_page():
-    st.header("Visualize Data")
+def view_data_page():
+    st.header("View Data")
     if 'data' in st.session_state:
         data = st.session_state['data']
-        st.write("Select a column to visualize:")
-
-        column = st.selectbox("Columns", data.columns)
-        if st.button("Generate Chart"):
-            try:
-                fig, ax = plt.subplots()
-                data[column].value_counts().plot(kind='bar', ax=ax)
-                st.pyplot(fig)
-            except Exception as e:
-                st.error(f"Error generating chart: {e}")
+        st.write("Here is your data:")
+        st.dataframe(data)
     else:
         st.warning("Please upload data first.")
 
